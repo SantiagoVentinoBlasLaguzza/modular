@@ -30,7 +30,6 @@ El pipeline está dividido en dos etapas principales y modulares:
 ## 3. Estructura del Repositorio
 
 
-.
 ├── 📂 scripts/
 │   ├── run_qc_pipeline.py             # 📜 Script ejecutor de la Etapa 1 (Control de Calidad)
 │   └── run_connectivity_pipeline.py   # 📜 Script ejecutor de la Etapa 2 (Extracción de Características)
