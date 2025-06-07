@@ -45,40 +45,56 @@ def initial_qc(signals: np.ndarray, expected_rois: int) -> dict:
 def process_subject(subject_info: pd.Series, config: dict) -> dict:
     """Procesa un único sujeto a través de todo el pipeline de QC."""
     subject_id = subject_info['SubjectID']
+    log.info(f"Procesando sujeto: {subject_id}")
     
     # 1. Cargar datos
     raw_signals = io.load_mat_data(subject_info['mat_path'])
     if raw_signals is None:
+        log.warning(f"No se pudo cargar el archivo .mat para el sujeto {subject_id}. Saltando.")
         return {'subject_id': subject_id, 'error': 'Failed to load .mat file'}
 
     # 2. QC Inicial
     qc_initial_results = initial_qc(raw_signals, config['atlas']['raw_expected_rois'])
 
-    # 3. Detección de Outliers Univariantes
+    # 3. Detección de Outliers Univariantes (sobre la matriz cruda)
+    #    Este paso es importante y faltaba en la versión anterior.
     _, univ_pct = univariate.detect_univariate_outliers(
         raw_signals,
         config['outliers']['univariate']['z_threshold'],
         config['outliers']['univariate']['method']
     )
 
-    # 4. Detección de Outliers Multivariantes (aquí se podría añadir el pre-filtrado de ROIs)
-    # Por simplicidad, este ejemplo pasa la matriz cruda.
-    # En una versión completa, se filtrarian los ROIs AAL3 y pequeños aquí.
-    mv_results = multivariate.detect_multivariate_outliers(raw_signals, config)
+    # 4. Detección de Outliers Multivariantes (con filtrado previo)
+    log.debug(f"Sujeto {subject_id}: Filtrando canales inválidos para análisis multivariante.")
+    
+    # Los índices en el config son 1-based, se convierten a 0-based para Python.
+    aal3_indices_to_remove = [idx - 1 for idx in config['atlas']['aal3_missing_indices_1based']]
 
-    # 5. Consolidar resultados
+    # Se usa np.delete para eliminar las columnas (axis=1) de los canales inválidos.
+    filtered_signals = np.delete(raw_signals, aal3_indices_to_remove, axis=1)
+
+    # Verificación para asegurar que el filtrado resultó en el número esperado de ROIs.
+    # Esta variable se añade al config.yaml.
+    expected_rois_after_filter = 166 # Calculado de 170 - 4
+    if filtered_signals.shape[1] != expected_rois_after_filter:
+        log.warning(f"Sujeto {subject_id}: Tras filtrar, se esperaban {expected_rois_after_filter} ROIs pero hay {filtered_signals.shape[1]}.")
+    
+    # Llamada ÚNICA al análisis multivariante con los datos ya filtrados.
+    mv_results = multivariate.detect_multivariate_outliers(filtered_signals, config)
+
+    # 5. Consolidar todos los resultados
     final_results = {
         'subject_id': subject_id,
         **qc_initial_results,
-        'univ_outliers_pct': univ_pct,
-        **mv_results
+        'univ_outliers_pct': univ_pct, # Se usa el resultado del paso 3.
+        **mv_results # Se usa el resultado del paso 4.
     }
     return final_results
 
 
 def main():
     """Función principal que ejecuta el pipeline completo."""
-    log.info("--- INICIANDO PIPELINE DE QC DE BOLD fMRI (REFACTORIZADO) ---")
+    log.info("--- INICIANDO PIPELINE DE QC DE BOLD fMRI (REFACTORIZADO Y CORREGIDO) ---")
     
     # Cargar configuración
     config_path = project_root / 'config.yaml'
