@@ -52,11 +52,10 @@ El pipeline está dividido en dos etapas principales y modulares:
 │   ├── report_qc_final.csv            #    - Reporte tabular con métricas y decisiones de descarte
 │   └── summary_report.html            #    - Reporte visual e interactivo de la calidad de datos
 │
-└── 🧠 connectivity_features/             # 📁 Directorio base para las características extraídas
-└── 📂 connectivity_5ch_20250607_161844/ # 📁 Carpeta de una ejecución específica (Ejemplo)
-├── tensor_002_S_0295.npy      #    - Tensor de conectividad para un sujeto
-├── ...                        #    - (Más archivos .npy para otros sujetos)
-└── processing_summary_log.csv #    - Log y características escalares de todos los sujetos
+🧠 connectivity_features/
+└── 📂 connectivity_5ch_20250607_161844/
+    ├── tensor_002_S_0295.npy
+    └── processing_summary_log.csv
 
 
 ---
