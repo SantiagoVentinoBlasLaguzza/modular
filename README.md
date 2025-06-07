@@ -1,4 +1,3 @@
-```markdown
 # Pipeline de Extracción de Características de Conectividad Funcional en rs-fMRI
 
 Este repositorio ofrece un **pipeline modular** en Python para procesar series temporales de fMRI en estado de reposo (rs-fMRI) y extraer un conjunto multimodal de características de conectividad, listo para alimentar modelos de Machine Learning (p. ej. Autoencoders Variacionales).
@@ -37,8 +36,6 @@ El flujo de trabajo consta de dos etapas secuenciales:
 
 ## 3. Estructura del Repositorio
 
-```
-
 .
 ├── scripts/
 │   ├── run\_qc\_pipeline.py             # Ejecuta Etapa 1 (QC)
@@ -67,8 +64,6 @@ El flujo de trabajo consta de dos etapas secuenciales:
 └── connectivity\_YYYYMMDD\_HHMMSS/
 ├── tensor\_\<SUBJECT\_ID>.npy
 └── processing\_summary\_log.csv
-
-````
 
 ---
 
