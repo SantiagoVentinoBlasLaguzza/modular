@@ -31,32 +31,33 @@ El pipeline está dividido en dos etapas principales y modulares:
 
 
 .
-├── scripts/
-│   ├── run_qc_pipeline.py             # Script para ejecutar la Etapa 1
-│   └── run_connectivity_pipeline.py   # Script para ejecutar la Etapa 2
+├── 📂 scripts/
+│   ├── run_qc_pipeline.py             # 📜 Script ejecutor de la Etapa 1 (Control de Calidad)
+│   └── run_connectivity_pipeline.py   # 📜 Script ejecutor de la Etapa 2 (Extracción de Características)
 │
-├── qc_bold/                           # Paquete para el Control de Calidad
-│   ├── io.py
-│   ├── univariate.py
-│   ├── multivariate.py
-│   └── report.py
+├── 📦 qc_bold/                           # 🐍 Paquete de Python para el Control de Calidad
+│   ├── io.py                          #    - Manejo de entrada/salida de datos y configuración
+│   ├── univariate.py                  #    - Detección de outliers en series temporales individuales
+│   ├── multivariate.py                #    - Detección de outliers en patrones de actividad global
+│   └── report.py                      #    - Generación de reportes CSV y HTML
 │
-├── fmri_features/                     # Paquete para la Extracción de Conectividad
-│   ├── data_loader.py
-│   ├── connectome_generator.py
-│   └── feature_extractor.py
+├── 📦 fmri_features/                     # 🐍 Paquete de Python para la Extracción de Conectividad
+│   ├── data_loader.py                 #    - Carga, limpieza y preprocesamiento de series temporales
+│   ├── connectome_generator.py        #    - Cálculo del tensor de conectividad multi-canal
+│   └── feature_extractor.py           #    - Extracción de biomarcadores (topología, HMM, etc.)
 │
-├── config.yaml                        # Archivo de configuración para la Etapa 1 (QC)
-├── config_connectivity.yaml           # Archivo de configuración para la Etapa 2
+├── 📄 config.yaml                        # ⚙️ Archivo de configuración para la Etapa 1 (QC)
+├── 📄 config_connectivity.yaml           # ⚙️ Archivo de configuración para la Etapa 2 (Conectividad)
 │
-├── qc_outputs_refactored_v1.0/        # Directorio de salida del QC
-│   ├── report_qc_final.csv
-│   └── summary_report.html
+├── 📊 qc_outputs_refactored_v1.0/        # 📁 Directorio de salida del QC (Ejemplo)
+│   ├── report_qc_final.csv            #    - Reporte tabular con métricas y decisiones de descarte
+│   └── summary_report.html            #    - Reporte visual e interactivo de la calidad de datos
 │
-└── connectivity_features/             # Directorio de salida de la Conectividad
-└── connectivity_5ch_.../
-├── tensor_SUBJECT_ID.npy
-└── processing_summary_log.csv
+└── 🧠 connectivity_features/             # 📁 Directorio base para las características extraídas
+└── 📂 connectivity_5ch_20250607_161844/ # 📁 Carpeta de una ejecución específica (Ejemplo)
+├── tensor_002_S_0295.npy      #    - Tensor de conectividad para un sujeto
+├── ...                        #    - (Más archivos .npy para otros sujetos)
+└── processing_summary_log.csv #    - Log y características escalares de todos los sujetos
 
 
 ---
